@@ -1,0 +1,127 @@
+[
+    {
+        "id": "f920913d3226f06c",
+        "type": "mqtt in",
+        "z": "dc01f5479ca9186f",
+        "name": "Recibir MQTT",
+        "topic": "utng/arg/sound",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "b43cb77a.8ffbd8",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 190,
+        "y": 260,
+        "wires": [
+            [
+                "fa54b222f9de7915",
+                "bb81085753f5c394"
+            ]
+        ]
+    },
+    {
+        "id": "fa54b222f9de7915",
+        "type": "function",
+        "z": "dc01f5479ca9186f",
+        "name": "Preparar Datos",
+        "func": "var switch_state = msg.payload.switch_state;\n\n// Convertir la cadena 'true'/'false' a valor booleano\nif (typeof switch_state === 'string') {\n    switch_state = (switch_state.toLowerCase() === 'true');\n}\n\nreturn {\n    topic: null,\n    payload: switch_state\n};",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 260,
+        "wires": [
+            [
+                "eb8a36eb32b58b45"
+            ]
+        ]
+    },
+    {
+        "id": "eb8a36eb32b58b45",
+        "type": "postgresql",
+        "z": "dc01f5479ca9186f",
+        "name": "Inserción PostgreSQL",
+        "query": "INSERT INTO sensor_reed_switch (switch_state) VALUES (TRUE);\n",
+        "postgreSQLConfig": "49c448cf338bd2d2",
+        "split": false,
+        "rowsPerMsg": "",
+        "outputs": 1,
+        "x": 620,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bb81085753f5c394",
+        "type": "debug",
+        "z": "dc01f5479ca9186f",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "b43cb77a.8ffbd8",
+        "type": "mqtt-broker",
+        "name": "Broker MQTT",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "49c448cf338bd2d2",
+        "type": "postgreSQLConfig",
+        "name": "aiot_connection",
+        "host": "127.0.0.1",
+        "hostFieldType": "str",
+        "port": "5432",
+        "portFieldType": "num",
+        "database": "aiot",
+        "databaseFieldType": "str",
+        "ssl": "false",
+        "sslFieldType": "bool",
+        "applicationName": "",
+        "applicationNameType": "str",
+        "max": "10",
+        "maxFieldType": "num",
+        "idle": "1000",
+        "idleFieldType": "num",
+        "connectionTimeout": "10000",
+        "connectionTimeoutFieldType": "num",
+        "user": "postgres",
+        "userFieldType": "str",
+        "password": "123456",
+        "passwordFieldType": "str"
+    }
+]
